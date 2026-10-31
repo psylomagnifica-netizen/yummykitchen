@@ -1,0 +1,1082 @@
+/* ============================================================
+   烹香物语 · 样式
+   暖色中式生活美学：竹帘、木案板、小盆栽
+   ============================================================ */
+:root {
+  --cream: #faf3e3;
+  --paper: #fffaf0;
+  --ink: #4a3b2a;
+  --ink-soft: #7a6a58;
+  --cinnabar: #c0392b;
+  --persimmon: #d35400;
+  --bamboo: #7a8b5c;
+  --wood: #8b5e34;
+  --gold: #e6b655;
+  --ok: #5c9e5f;
+  --bad: #b3402e;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(74, 59, 42, .14);
+  --font-title: "STKaiti", "KaiTi", "Noto Serif SC", "SimSun", serif;
+  --font-body: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+img { user-select: none; -webkit-user-drag: none; }
+/* 舞台内禁止文本选中：在素材上按下并拖动时，浏览器会进入「选中模式」，
+   把后续 pointermove 吞掉，导致下一次拖拽手势整段失效。 */
+.cook-stage, .cook-stage *, .prep-board, .prep-board * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+button { font-family: inherit; cursor: pointer; }
+
+/* ---------- 通用 ---------- */
+.paper {
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.hidden { display: none !important; }
+
+.btn {
+  border: 1.5px solid var(--wood);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 15px;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(74,59,42,.18); }
+.btn:active { transform: translateY(0); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--cinnabar), var(--persimmon));
+  border-color: transparent;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-big { font-size: 19px; padding: 14px 46px; }
+.btn-ghost { border-color: transparent; background: transparent; color: var(--ink-soft); }
+.btn-ghost:hover { background: rgba(139, 94, 52, .08); box-shadow: none; }
+
+/* ---------- 屏幕切换 ---------- */
+.screen {
+  display: none;
+  min-height: 100vh;
+  animation: screenIn .45s ease;
+}
+.screen.active { display: block; }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- 启动页 ---------- */
+#screen-start { position: relative; display: none; }
+#screen-start.active { display: flex; align-items: center; justify-content: center; padding: 24px; }
+.start-bg {
+  position: fixed; inset: 0; z-index: -1;
+  background: url("../assets/scene/kitchen.jpg?v=5") center/cover no-repeat;
+}
+.start-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(250,243,227,.25), rgba(74,59,42,.55));
+}
+.start-card {
+  max-width: 560px; width: 100%;
+  padding: 42px 44px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 250, 240, .94);
+}
+.start-kicker { color: var(--bamboo); letter-spacing: .35em; font-size: 13px; }
+.game-title {
+  font-family: var(--font-title);
+  font-size: clamp(44px, 8vw, 64px);
+  color: var(--cinnabar);
+  margin: 6px 0 2px;
+  letter-spacing: .12em;
+}
+.start-sub { color: var(--ink-soft); margin-bottom: 16px; }
+.start-desc { font-size: 15px; line-height: 1.8; color: var(--ink); margin-bottom: 18px; }
+.scent-notice {
+  text-align: left;
+  background: #fdf0dc;
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.scent-notice strong { color: var(--persimmon); display: block; margin-bottom: 4px; }
+.check-line {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--ink-soft);
+  justify-content: center; margin-bottom: 10px; flex-wrap: wrap;
+}
+.check-line select { border-radius: 8px; padding: 4px 8px; border: 1px solid #d8c7ac; background: #fff; }
+#btn-start { margin-top: 10px; }
+.privacy-note { margin-top: 14px; font-size: 12px; color: #a3927c; }
+
+/* 环境自检提示（file:// 打开时出现，提示改用本地服务器） */
+.env-notice {
+  margin-top: 16px; padding: 12px 14px;
+  background: rgba(230, 182, 85, .12);
+  border: 1px solid rgba(230, 182, 85, .42);
+  border-radius: 10px;
+  text-align: left;
+  font-size: 12.5px; line-height: 1.7; color: var(--ink-soft);
+}
+.env-notice strong { color: var(--ink); display: block; margin-bottom: 4px; }
+.env-notice p { margin: 4px 0 0; }
+.env-notice code {
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 12px; padding: 1px 6px; border-radius: 5px;
+  background: rgba(0, 0, 0, .07); color: var(--ink);
+}
+.env-notice .env-note { color: #a3927c; }
+
+/* ---------- 菜单页 ---------- */
+#screen-menu { padding: clamp(16px, 4vw, 48px); max-width: 1200px; margin: 0 auto; }
+.page-header { text-align: center; margin-bottom: 28px; }
+.page-header h2 { font-family: var(--font-title); font-size: clamp(28px, 5vw, 40px); color: var(--ink); }
+.header-sub { color: var(--ink-soft); margin-top: 6px; }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+.dish-card {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+  display: flex; flex-direction: column;
+}
+.dish-card:hover { transform: translateY(-6px); box-shadow: 0 14px 34px rgba(74,59,42,.22); }
+.dish-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+.dish-card .card-body { padding: 14px 16px 16px; }
+.dish-card .card-name { font-family: var(--font-title); font-size: 22px; }
+.dish-card .card-title { font-size: 13px; color: var(--persimmon); margin: 2px 0 8px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  background: #f3e7cf; color: var(--wood);
+}
+.tag.scent { background: #e8ecda; color: var(--bamboo); }
+.card-badge {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 12px; padding: 4px 12px; border-radius: 999px;
+  background: rgba(192, 57, 43, .92); color: #fff;
+}
+.card-badge.ext { background: rgba(122, 139, 92, .92); }
+.card-steps { position: absolute; top: 12px; right: 12px; font-size: 12px; background: rgba(255,250,240,.9); padding: 4px 10px; border-radius: 999px; color: var(--ink-soft); }
+
+/* ---------- 菜品说明页 ---------- */
+#screen-dish { padding: clamp(16px, 4vw, 48px); display: none; }
+#screen-dish.active { display: flex; justify-content: center; }
+.dish-intro { max-width: 860px; width: 100%; padding: 30px 34px; }
+.dish-intro .intro-head { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.dish-intro img.intro-img { width: 200px; height: 200px; object-fit: cover; border-radius: 12px; }
+.dish-intro h2 { font-family: var(--font-title); font-size: 34px; color: var(--cinnabar); }
+.dish-intro .intro-title { color: var(--persimmon); margin: 4px 0 10px; }
+.intro-section { margin-top: 18px; }
+.intro-section h3 { font-size: 15px; color: var(--wood); margin-bottom: 8px; }
+.intro-steps { color: var(--ink-soft); line-height: 2; }
+.intro-ing { display: flex; gap: 14px; flex-wrap: wrap; }
+.intro-ing .ing-chip { text-align: center; font-size: 12px; color: var(--ink-soft); width: 72px; }
+.intro-ing .ing-chip img { width: 64px; height: 64px; object-fit: contain; }
+.intro-actions { margin-top: 26px; display: flex; gap: 12px; flex-wrap: wrap; }
+.script-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.script-table th, .script-table td { border: 1px solid #e6d8bd; padding: 8px 10px; text-align: left; vertical-align: top; line-height: 1.6; }
+.script-table th { background: #f6ecd6; color: var(--wood); }
+
+/* ---------- 烹饪页 ---------- */
+#screen-cook.active { display: flex; flex-direction: column; height: 100vh; }
+.cook-topbar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px;
+  background: var(--paper);
+  box-shadow: 0 2px 10px rgba(74,59,42,.08);
+  z-index: 5; flex-wrap: wrap;
+}
+.cook-title-wrap { flex: 1; min-width: 200px; }
+.cook-title-wrap h2 { font-family: var(--font-title); font-size: 24px; color: var(--cinnabar); }
+.step-pills { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.step-pill {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #eadfc8; color: var(--ink-soft);
+  font-size: 12px; display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.step-pill.doing { background: var(--persimmon); color: #fff; }
+.step-pill.done { background: var(--bamboo); color: #fff; }
+.cook-controls { display: flex; gap: 4px; }
+
+.cook-body {
+  flex: 1; display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 16px; padding: 16px;
+  min-height: 0;
+}
+.cook-stage {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: url("../assets/scene/kitchen.jpg?v=5") center/cover no-repeat, #e8d9b8;
+  box-shadow: var(--shadow);
+  min-height: 420px;
+}
+.cook-side { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+.side-block { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; }
+.side-block h3 { font-size: 14px; color: var(--wood); margin-bottom: 8px; }
+.hint-text { font-size: 15px; line-height: 1.7; min-height: 44px; }
+.hint-text em { color: var(--persimmon); font-style: normal; font-weight: 600; }
+
+.feedback-banner {
+  margin-top: 10px; padding: 10px 14px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; line-height: 1.5;
+  animation: popIn .3s ease;
+}
+.feedback-banner.ok { background: #e6f2e4; color: var(--ok); border: 1px solid #bcd9bd; }
+.feedback-banner.bad { background: #fbe7e1; color: var(--bad); border: 1px solid #eec5b8; }
+.feedback-banner.info { background: #fdf0dc; color: var(--persimmon); border: 1px solid #eed9ae; }
+@keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- 灶台舞台元素 ---------- */
+.stage-hint-arrow {
+  position: absolute; pointer-events: none;
+  font-size: 26px; color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
+  animation: bob 1s ease-in-out infinite;
+  z-index: 6;
+}
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+.wok-zone .contents img { position: absolute; width: 46%; filter: drop-shadow(0 3px 5px rgba(0,0,0,.35)); animation: dropIn .35s ease; }
+@keyframes dropIn { from { transform: translateY(-46px) scale(1.25); opacity: 0; } to { transform: none; opacity: 1; } }
+.wok-zone.stirring .contents { animation: stirShake .28s linear infinite; }
+@keyframes stirShake {
+  0% { transform: rotate(-4deg) translateX(-3px); }
+  50% { transform: rotate(4deg) translateX(3px); }
+  100% { transform: rotate(-4deg) translateX(-3px); }
+}
+.heat-glow {
+  position: absolute; left: 50%; top: 62%;
+  width: 120%; height: 60%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255,120,30,.85), rgba(255,80,10,.35) 55%, transparent 75%);
+  opacity: 0; transition: opacity .3s;
+  pointer-events: none; z-index: 1;
+}
+.char-overlay {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(30,20,10,.75), rgba(30,20,10,.25) 70%, transparent);
+  opacity: 0; transition: opacity .5s; pointer-events: none;
+}
+.smoke-puff {
+  position: absolute; width: 34px; height: 34px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(90,90,90,.5), transparent 70%);
+  animation: smokeUp 2.2s ease-out forwards;
+  pointer-events: none; z-index: 4;
+}
+@keyframes smokeUp {
+  from { transform: translateY(0) scale(.6); opacity: .8; }
+  to { transform: translateY(-160px) scale(2.4); opacity: 0; }
+}
+.steam-puff {
+  position: absolute; width: 30px; height: 30px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.75), transparent 70%);
+  animation: smokeUp 2.6s ease-out forwards;
+  pointer-events: none; z-index: 4;
+}
+
+.prep-board {
+  position: absolute;
+  left: 3%; bottom: 4%;
+  display: flex; gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 250, 240, .88);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  z-index: 5; flex-wrap: wrap;
+  max-width: 42%;
+}
+.ing-item {
+  width: clamp(56px, 7vw, 84px);
+  text-align: center;
+  cursor: grab;
+  touch-action: none;
+  transition: transform .15s;
+  position: relative;
+  flex: 0 0 auto;              /* 不被 flex 压扁，窄屏下保持素材可辨认 */
+}
+.ing-item:hover { transform: translateY(-4px) scale(1.05); }
+.ing-item img { width: 100%; aspect-ratio: 1/1; object-fit: contain; pointer-events: none; }
+.ing-item .ing-name { font-size: 12px; color: var(--ink-soft); }
+.ing-item.next::after {
+  content: ""; position: absolute; inset: -6px;
+  border: 2px dashed var(--persimmon); border-radius: 12px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
+.ing-item.used { opacity: .25; filter: grayscale(.8); cursor: default; }
+/* 点选替代路径：轻点拾起后的高亮态 */
+.ing-item.picked {
+  outline: 3px solid var(--persimmon);
+  outline-offset: 4px;
+  border-radius: 12px;
+  background: rgba(255, 245, 225, .6);
+  transform: translateY(-4px) scale(1.06);
+  animation: pickPulse 1.1s ease-in-out infinite;
+}
+@keyframes pickPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(230, 182, 85, .75); }
+  50% { box-shadow: 0 0 0 10px rgba(230, 182, 85, 0); }
+}
+
+/* ============================================================
+   组合食材卡片（「一碗米」）
+   碗固定铺在卡片底层不动，只有碗里的内容物是可拖拽把手。
+   几何比例对齐 tools/preview_combo.py 的方案 A：
+   碗 scale 1.0（宽 = 卡片宽，底边贴底）、米 width 62%、米心 y 44%。
+   ============================================================ */
+.ing-item.combo {
+  width: clamp(72px, 8.8vw, 108px);
+  cursor: default;
+}
+.ing-item.combo:hover { transform: none; }
+.ing-item.combo .combo-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+.ing-item.combo .combo-bowl {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  pointer-events: none;            /* 碗不可拖、不可点 */
+  filter: drop-shadow(0 3px 6px rgba(60, 40, 20, .3));
+  z-index: 1;
+}
+.ing-item.combo .combo-pick {
+  position: absolute;
+  left: 50%; top: 24.7%;
+  width: 62%;
+  transform: translateX(-50%);
+  cursor: grab;
+  touch-action: none;
+  z-index: 2;
+  transition: transform .15s;
+}
+.ing-item.combo .combo-pick:active { cursor: grabbing; }
+.ing-item.combo .combo-pick img {
+  width: 100%; height: auto;
+  aspect-ratio: auto;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(60, 40, 20, .32));
+}
+.ing-item.combo:hover .combo-pick { transform: translateX(-50%) translateY(-3px); }
+.ing-item.combo .ing-name { position: relative; z-index: 3; }
+/* 用过之后：米从碗里消失，只留下空碗（碗是固定道具，不跟着灰掉） */
+.ing-item.combo.used { opacity: 1; filter: none; cursor: default; }
+.ing-item.combo.used .combo-bowl { opacity: .32; filter: grayscale(.85); }
+.ing-item.combo.used .combo-pick { display: none; }
+.ing-item.combo.used .ing-name { opacity: .3; }
+/* 点选替代路径：拾起时高亮「米」而不是整个碗 */
+.ing-item.combo.picked { outline: none; background: none; transform: none; }
+.ing-item.combo.picked .combo-pick {
+  transform: translateX(-50%) translateY(-4px) scale(1.08);
+  filter: drop-shadow(0 0 8px rgba(230, 182, 85, .95));
+}
+
+.drag-ghost {
+  position: fixed; z-index: 1000; pointer-events: none;
+  width: 84px; filter: drop-shadow(0 8px 12px rgba(0,0,0,.3));
+  transform: translate(-50%, -60%) scale(1.1);
+  transition: transform .12s;
+}
+.drag-ghost img { width: 100%; }
+/* 组合素材（宽扁的米堆）幽灵图加宽，跟碗口比例接近 */
+.drag-ghost.drag-ghost-wide { width: 108px; }
+
+.stage-tool { position: absolute; z-index: 5; touch-action: none; cursor: grab; }
+.stage-tool img { width: 100%; pointer-events: none; }
+
+.progress-ring {
+  position: absolute; inset: -14px;
+  border-radius: 50%;
+  pointer-events: none; z-index: 2;
+}
+
+/* 粽子包裹区 */
+.wrap-zone {
+  position: absolute; left: 50%; top: 62%;
+  width: 44%; aspect-ratio: 1/1;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+.wrap-zone.droppable { filter: drop-shadow(0 0 18px rgba(230,182,85,.9)); }
+.wrap-zone > img.leaf-img { width: 100%; transition: transform .45s ease, filter .45s ease; }
+.wrap-zone .on-leaf { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.wrap-zone .on-leaf img { position: absolute; width: 34%; animation: dropIn .35s ease; }
+.fold-arrow {
+  position: absolute; z-index: 6; pointer-events: none;
+  font-size: 30px; color: var(--persimmon);
+  text-shadow: 0 0 8px #fff, 0 0 14px #fff;
+  animation: bob 1s ease-in-out infinite;
+}
+.zongzi-done {
+  position: absolute; left: 50%; top: 62%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(56px, 8vw, 96px);
+  animation: popIn .45s ease;
+  z-index: 3; text-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+.steamer-wrap {
+  position: absolute; left: 50%; top: 68%;
+  width: 34%; transform: translate(-50%, -50%);
+  z-index: 3;
+}
+.steamer-wrap img { width: 100%; }
+
+/* ---------- 火候条 ---------- */
+.firebar { position: relative; margin-top: 6px; }
+.firebar-track {
+  position: relative; height: 26px;
+  border-radius: 999px;
+  background: #eee0c4;
+  overflow: hidden;
+}
+.firebar-zone { position: absolute; top: 0; bottom: 0; }
+.firebar-zone.z-under { background: #e9d9b8; }
+.firebar-zone.z-good { background: linear-gradient(180deg, #8fbf74, #6da356); }
+.firebar-zone.z-over { background: linear-gradient(180deg, #e0916b, #c65f3d); }
+.firebar-fill {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+  background: linear-gradient(90deg, rgba(255,214,120,.55), rgba(255,140,40,.75));
+  border-radius: 999px;
+}
+.firebar-needle {
+  position: absolute; top: -4px; bottom: -4px; width: 4px;
+  background: var(--ink); border-radius: 2px;
+  transform: translateX(-2px);
+  box-shadow: 0 0 6px rgba(0,0,0,.4);
+}
+.firebar-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-soft); margin-top: 5px; }
+.btn-fire {
+  width: 100%; margin-top: 10px;
+  font-size: 17px; font-weight: 700;
+  padding: 13px; border-radius: 12px;
+  border: none; color: #fff;
+  background: linear-gradient(135deg, var(--cinnabar), var(--persimmon));
+  box-shadow: 0 4px 14px rgba(192,57,43,.35);
+  transition: transform .12s;
+}
+.btn-fire:hover { transform: scale(1.03); }
+.btn-fire:disabled { opacity: .4; box-shadow: none; transform: none; cursor: default; }
+
+/* ---------- 气味面板 ---------- */
+.badge-sim {
+  font-size: 10px; background: var(--gold); color: #fff;
+  padding: 2px 8px; border-radius: 999px; vertical-align: 2px;
+}
+.scent-panel .scent-name { font-size: 15px; font-weight: 600; }
+.scent-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-soft); margin: 6px 0; }
+.scent-dots { letter-spacing: 2px; color: var(--persimmon); }
+.scent-bar { height: 5px; background: #eee0c4; border-radius: 99px; overflow: hidden; }
+#scent-bar-fill { height: 100%; width: 0%; background: var(--gold); transition: width .2s linear; }
+.scent-block.off { opacity: .45; }
+
+.scent-toast {
+  position: fixed; right: 18px; bottom: 18px; z-index: 900;
+  background: rgba(74, 59, 42, .92); color: #ffeed2;
+  padding: 12px 18px; border-radius: 12px;
+  font-size: 14px; box-shadow: var(--shadow);
+  animation: toastIn .3s ease;
+  max-width: 300px;
+}
+.scent-toast .sim-tag { font-size: 11px; background: var(--gold); color: #4a3b2a; border-radius: 99px; padding: 1px 8px; margin-left: 6px; }
+@keyframes toastIn { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- 步骤列表 ---------- */
+.step-list { padding-left: 20px; font-size: 13px; color: var(--ink-soft); line-height: 2; }
+.step-list li.doing { color: var(--persimmon); font-weight: 600; }
+.step-list li.done { color: var(--bamboo); text-decoration: line-through; }
+
+/* ---------- 遮罩 ---------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 800;
+  background: rgba(58, 44, 30, .5);
+  backdrop-filter: blur(5px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: screenIn .3s ease;
+}
+.overlay-card { padding: 34px 40px; text-align: center; max-width: 420px; width: 100%; }
+.overlay-card h2 { font-family: var(--font-title); margin-bottom: 10px; }
+.overlay-card p { color: var(--ink-soft); margin-bottom: 18px; line-height: 1.7; }
+.overlay-card .btn { display: block; width: 100%; margin-bottom: 10px; }
+.modal-wide { max-width: 760px; max-height: 86vh; overflow-y: auto; text-align: left; position: relative; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px;
+  border: none; background: none; font-size: 26px; color: var(--ink-soft);
+}
+
+/* ---------- 结果页 ---------- */
+#screen-result { padding: clamp(14px, 3vw, 40px); }
+#screen-result.active { display: flex; justify-content: center; }
+.result-layout {
+  display: grid; grid-template-columns: minmax(280px, 420px) minmax(280px, 420px);
+  gap: 26px; align-items: start; width: 100%; max-width: 920px;
+}
+.result-card-wrap { border-radius: 18px; overflow: hidden; box-shadow: 0 14px 40px rgba(74,59,42,.3); }
+#result-canvas { width: 100%; height: auto; display: block; }
+.result-side { padding: 26px 28px; }
+.result-side h2 { font-family: var(--font-title); color: var(--cinnabar); font-size: 30px; }
+.result-summary { margin: 12px 0 18px; line-height: 1.9; color: var(--ink-soft); font-size: 14px; }
+.result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.result-actions .btn { width: 100%; }
+.share-hint { margin-top: 14px; font-size: 12px; color: var(--bamboo); }
+.feedback-box { margin-top: 20px; border-top: 1px dashed #dcc9a4; padding-top: 16px; }
+.feedback-box h3 { font-size: 14px; color: var(--wood); margin-bottom: 10px; }
+.star-row { display: flex; gap: 8px; font-size: 30px; }
+.star-row .star { cursor: pointer; color: #d8c7ac; transition: transform .12s, color .12s; background: none; border: none; }
+.star-row .star.lit { color: var(--gold); }
+.star-row .star:hover { transform: scale(1.2); }
+#feedback-thanks { color: var(--bamboo); font-size: 13px; margin-top: 8px; }
+#btn-export-log { margin-top: 12px; font-size: 12px; }
+
+/* ============================================================
+   扩展菜品组件：奶茶 / 火锅 / 酸菜鱼 / 鲜花饼
+   ============================================================ */
+
+/* 选择浮层（茶底/锅底/口味/花馅等分支）
+   遮罩刻意压深：浮层里的「就选这些」这类按钮常常落在场景锅具上方，
+   压深的遮罩让底层厨具退为背景，避免按钮与锅具抢视觉。 */
+.choice-overlay {
+  position: absolute; inset: 0; z-index: 10;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 18px;
+  background: linear-gradient(180deg, rgba(44,32,20,.52), rgba(44,32,20,.70));
+  backdrop-filter: blur(4px);
+  padding: 4% 5% 12%;
+}
+.choice-title {
+  font-family: var(--font-title); font-size: clamp(20px, 3vw, 30px);
+  color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.5);
+}
+.choice-cards { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+.choice-card {
+  background: var(--paper); border-radius: 14px; box-shadow: var(--shadow);
+  padding: 18px 22px; text-align: center; cursor: pointer;
+  min-width: 130px; transition: transform .18s ease;
+}
+.choice-card:hover { transform: translateY(-5px); }
+.choice-card.selected { outline: 3px solid var(--persimmon); }
+.choice-card .cc-name { font-family: var(--font-title); font-size: 22px; color: var(--cinnabar); }
+.choice-card .cc-sub { font-size: 12px; color: var(--ink-soft); margin-top: 6px; line-height: 1.6; }
+.choice-card img { width: 58px; height: 58px; object-fit: contain; margin: 4px; }
+.choice-card .cc-swatch { width: 44px; height: 44px; border-radius: 50%; margin: 6px auto; box-shadow: inset 0 -4px 8px rgba(0,0,0,.18); }
+.choice-panel { background: var(--paper); border-radius: 14px; box-shadow: var(--shadow); padding: 20px 26px; max-width: 480px; width: 100%; }
+.seg-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
+.seg-label { font-size: 14px; color: var(--wood); font-weight: 600; min-width: 56px; }
+.seg-btn {
+  border: 1.5px solid #d8c7ac; background: #fff; color: var(--ink-soft);
+  border-radius: 999px; padding: 6px 16px; font-size: 14px;
+  transition: all .15s;
+}
+.seg-btn.selected { background: var(--persimmon); border-color: var(--persimmon); color: #fff; }
+
+/* 奶茶杯（直筒玻璃杯，素材 631×850） */
+.cup-zone {
+  position: absolute; left: 50%; top: 60%;
+  width: 24%; min-width: 120px;
+  transform: translate(-50%, -50%);
+  z-index: 3; touch-action: none;
+}
+.cup-zone > img.cup-img {
+  width: 100%; position: relative; z-index: 2; pointer-events: none;
+  display: block;                 /* 去掉 inline 基线间隙，保证染色层与杯图严丝合缝 */
+  filter: drop-shadow(0 10px 14px rgba(50,32,16,.42));
+}
+/* 加奶后的汤色染色层。
+   满杯牛奶素材里的牛奶是不透明的纯白，直接换图会让玩家选的茶底彻底看不见。
+   这里叠一层「茶奶混合色」并用 multiply 乘到牛奶上（白 × 色 = 色），
+   再用 PNG 遮罩把范围限制在杯内牛奶区 —— 玻璃壁与奶油描边不受影响。 */
+.cup-zone .cup-tint {
+  position: absolute; inset: 0;
+  z-index: 3;
+  background-color: transparent;
+  mix-blend-mode: multiply;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .7s ease, background-color .7s ease;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.cup-zone.has-milk .cup-tint { opacity: 1; }
+/* 液面必须压在杯图之上，否则会被杯壁完全遮住（曾导致「杯中无茶」）。
+   位置按玻璃杯素材的杯口内腔对齐：杯口椭圆占图高 5%~30%（中心 17.5%），
+   最大宽 86%（x 6.6%~92.7%），液面略收进内壁。 */
+.cup-zone .liquid {
+  position: absolute; left: 17%; top: 13%;
+  width: 66%; height: 10%;
+  border-radius: 50%;
+  background: transparent;
+  background-image: radial-gradient(ellipse at 36% 30%, rgba(255,255,255,.16), rgba(255,255,255,0) 60%);
+  z-index: 3; transition: background-color .8s ease, transform .3s;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,.22);
+}
+/* 换成满杯素材后，杯图自带奶面与奶体，液面元素改作「搅拌高光」用：
+   定位到满杯素材的奶面椭圆（占图高 19%~33%、宽 13%~86%）。 */
+.cup-zone.has-milk .liquid {
+  left: 13%; top: 19%; width: 74%; height: 13%;
+  background-color: transparent !important;
+  background-image: radial-gradient(ellipse at 38% 32%, rgba(255,255,255,.34), rgba(255,255,255,0) 62%);
+  box-shadow: none;
+}
+.cup-zone.stirring .liquid { animation: swirl .5s linear infinite; }
+@keyframes swirl { 0% { transform: rotate(0) scaleX(1); } 50% { transform: rotate(6deg) scaleX(.94); } 100% { transform: rotate(0) scaleX(1); } }
+.cup-zone .lid {
+  position: absolute; left: 11%; top: 7%;
+  width: 78%; height: 13%;
+  background: linear-gradient(180deg, #f3e7cf, #d8c7ac);
+  border: 3px solid #b8a284; border-radius: 50%;
+  z-index: 4; animation: dropIn .3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+}
+.cup-zone.droppable { filter: drop-shadow(0 0 16px rgba(230,182,85,.9)); }
+.hold-ring {
+  position: absolute; left: 50%; top: -30px; transform: translateX(-50%);
+  width: 46px; height: 46px; z-index: 5; pointer-events: none;
+}
+
+/* 汤锅（火锅 / 酸菜鱼共用炒锅区 + 汤面） */
+.broth {
+  position: absolute; inset: 12% 14%;
+  border-radius: 50%;
+  background: #c0392b;
+  opacity: .92;
+  transition: background .6s ease, filter .6s;
+  box-shadow: inset 0 4px 14px rgba(0,0,0,.3);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.broth img { position: absolute; width: 40%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3)); animation: dropIn .35s ease; pointer-events: none; }
+.broth .fish-slice { width: 38%; opacity: .65; filter: brightness(1.35) drop-shadow(0 2px 4px rgba(0,0,0,.3)); transition: opacity .5s, filter .5s; }
+.broth.bubbling { animation: brothBob 1.1s ease-in-out infinite; }
+@keyframes brothBob { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+/* 烤箱 */
+.oven {
+  position: absolute; right: 6%; top: 16%;
+  width: 30%; min-width: 170px; aspect-ratio: 1.15/1;
+  background: linear-gradient(160deg, #6b5a4a, #4a3b2a);
+  border-radius: 14px; border: 4px solid #8b5e34;
+  box-shadow: var(--shadow);
+  z-index: 4;
+}
+.oven .oven-window {
+  position: absolute; inset: 14% 10% 20%;
+  background: #2b2119; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  transition: background .5s;
+}
+.oven.on .oven-window { background: radial-gradient(circle at 50% 70%, #7a3d12, #2b2119 80%); }
+.oven .oven-window img { width: 55%; transition: filter .4s; }
+.oven .oven-lamp {
+  position: absolute; left: 12%; bottom: 6%;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #57493c;
+}
+.oven.on .oven-lamp { background: #ffb347; box-shadow: 0 0 10px #ffb347; }
+.oven.droppable { outline: 3px dashed var(--gold); }
+
+/* 鲜花饼案板 */
+/* 案板整体右移，避开左下角的备料区（两者曾重叠） */
+.board-zone {
+  position: absolute; left: 21%; bottom: 9%;
+  width: 34%; z-index: 3;
+}
+.board-zone > img.board-img { width: 100%; }
+.board-zone .dough-wrap {
+  position: absolute; left: 50%; top: 42%;
+  width: 52%; transform: translate(-50%, -50%);
+  touch-action: none;
+}
+.board-zone .dough-wrap > img.dough-img { width: 100%; transition: transform .4s ease, filter .4s; }
+.board-zone .dough-wrap .on-dough { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.board-zone .dough-wrap .on-dough img { position: absolute; width: 55%; animation: dropIn .3s ease; }
+.board-zone.droppable { filter: drop-shadow(0 0 14px rgba(230,182,85,.9)); }
+
+/* 轻压定形进度环：套在面团外圈，摄像头合十与长按共用 */
+.press-ring {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 104%; aspect-ratio: 1;
+  z-index: 6; pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+.press-ring.hidden { display: none; }
+
+/* 摄像头面板里的「双手合十」指示：两只手靠拢 = 合十
+   左手拇指朝左、右手为左手镜像（拇指朝右）—— 正是合十时两只手的样子 */
+.cam-hand-row {
+  display: flex; align-items: center; gap: 12px;
+  margin: 9px 0 8px; min-height: 32px;
+}
+.cam-hand-row span:last-child { font-size: 12px; color: var(--ink-soft); }
+.gh {
+  position: relative; flex: none;
+  width: 22px; height: 32px;
+  color: var(--ink-soft);
+  transition: transform .28s cubic-bezier(.34, 1.4, .64, 1), color .25s ease;
+}
+.gh i {
+  position: absolute; bottom: 9px;
+  width: 4px; border-radius: 3px 3px 1px 1px;
+  background: currentColor;
+}
+.gh i:nth-child(1) { left: 0;  bottom: 4px; height: 11px; transform: rotate(-34deg); transform-origin: bottom center; }  /* 拇指 */
+.gh i:nth-child(2) { left: 4px;  height: 12px; }   /* 小指 */
+.gh i:nth-child(3) { left: 9px;  height: 19px; }   /* 中指 */
+.gh i:nth-child(4) { left: 14px; height: 22px; }   /* 食指 */
+.gh b {
+  position: absolute; left: 1px; bottom: 0;
+  width: 19px; height: 13px;
+  border-radius: 5px 5px 7px 7px;
+  background: currentColor;
+}
+/* 静止：两掌分开、各自微微外倾 */
+.gh-l { transform: translateX(2px) rotate(11deg); }
+.gh-r { transform: translateX(-2px) rotate(-11deg) scaleX(-1); }
+/* 检测到双手但还没合拢：靠近一点，给出「还差一点」的直觉 */
+.cam-hand-row.near .gh-l { transform: translateX(4px) rotate(8deg); }
+.cam-hand-row.near .gh-r { transform: translateX(-4px) rotate(-8deg) scaleX(-1); }
+.cam-hand-row.near .gh { color: #c99a3e; }
+/* 合十成立：两掌贴在一起并变绿 */
+.cam-hand-row.on .gh { color: #4e9d5c; }
+.cam-hand-row.on .gh-l { transform: translateX(6px) rotate(4deg); }
+.cam-hand-row.on .gh-r { transform: translateX(-6px) rotate(-4deg) scaleX(-1); }
+.cam-hand-row.on span:last-child { color: #4e9d5c; font-weight: 600; }
+@keyframes ghPulse { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.22); } }
+.cam-hand-row.on .gh { animation: ghPulse .9s ease-in-out infinite; }
+
+/* ============================================================
+   炒锅图像（透明底厨具素材）
+   —— 落在下方木台面上，尺寸收敛，贴纸描边保留原插画风格
+   ============================================================ */
+/* ============================================================
+   锅具几何（新铁锅为俯视视角，锅口内腔在图内 8%~88% 宽、18%~78% 高）
+   .wok-zone 直接对应「锅口内腔矩形」，锅图按比例外扩绘制
+   ============================================================ */
+.wok-zone {
+  position: absolute;
+  left: 61%; top: 63%;
+  width: 31%;
+  aspect-ratio: 1.4216;          /* 0.80*W_img / (0.60*H_img) */
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 3;
+  cursor: grab;
+  touch-action: none;
+}
+.wok-zone:active { cursor: grabbing; }
+.wok-zone.droppable { box-shadow: 0 0 0 3px rgba(230,182,85,.9), 0 0 34px rgba(230,182,85,.55); }
+/* 锅图整体外扩：左上角让出锅口内腔外的部分 */
+.wok-zone .wok-img {
+  position: absolute;
+  left: -12.5%; top: -37.5%;
+  width: 125%;
+  height: auto;
+  aspect-ratio: 726 / 681;
+  pointer-events: none;
+  z-index: 0;
+  filter: drop-shadow(0 8px 16px rgba(50,32,16,.5));
+}
+/* 食材落在锅内腔（锅底略偏下） */
+.wok-zone .contents {
+  position: absolute;
+  left: 8%; width: 84%;
+  top: 12%; height: 84%;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: filter .4s;
+  pointer-events: none;
+}
+.wok-zone .heat-glow {
+  left: 50%; top: 50%;
+  width: 125%; height: 105%;
+  transform: translate(-50%, -50%);
+}
+.wok-zone .contents { z-index: 2; }
+.wok-zone .char-overlay { z-index: 3; }
+
+/* 汤锅样式（火锅 / 酸菜鱼）：锅体更大，汤面居于锅内（留出内壁黑边） */
+.wok-zone.pot-style {
+  left: 61%; top: 61%;
+  width: 38%;
+}
+.wok-zone.pot-style .broth {
+  inset: 17% 15% 11% 15%;
+}
+
+/* 跳过嗅觉按钮激活态 */
+.cook-controls .btn.active {
+  background: var(--persimmon);
+  border-color: var(--persimmon);
+  color: #fff;
+}
+
+/* ============================================================
+   响应式（必须放在文件末尾：同特异度下后写的规则才生效）
+   ============================================================ */
+/* ============================================================
+   摄像头面板（奶茶「眨眼封口」）
+   刻意贴在舞台右上角：茶杯位于中下方，左下角留给备料区，
+   避免面板压住杯口导致用户看不到封口动画。
+   ============================================================ */
+.cam-overlay {
+  position: absolute; inset: 0; z-index: 12;
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  padding: 16px 18px;
+  pointer-events: none;
+}
+.cam-panel {
+  pointer-events: auto;
+  width: 252px; max-width: 46%;
+  background: var(--paper);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 12px 14px 10px;
+  border: 1px solid rgba(180, 140, 90, .35);
+}
+.cam-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-bottom: 8px;
+}
+.cam-title {
+  font-family: var(--font-title); font-size: 16px; color: var(--cinnabar);
+  letter-spacing: 1px;
+}
+.cam-badge {
+  font-size: 11px; color: var(--ink-soft);
+  background: rgba(230, 182, 85, .22);
+  border: 1px solid rgba(230, 182, 85, .5);
+  border-radius: 999px; padding: 2px 9px;
+  white-space: nowrap;
+}
+.cam-view {
+  position: relative; width: 100%; aspect-ratio: 4 / 3;
+  background: #2a2018; border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .18);
+}
+.cam-view video {
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scaleX(-1);          /* 镜像，符合「照镜子」直觉 */
+  display: block;
+}
+.cam-view canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.cam-veil {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; text-align: center;
+  background: linear-gradient(180deg, rgba(42, 32, 24, .88), rgba(42, 32, 24, .94));
+  color: #f4e8d4; font-size: 12px; line-height: 1.6;
+  transition: opacity .25s ease;
+}
+.cam-veil.cam-veil-off { opacity: 0; pointer-events: none; }
+.cam-veil-eye { font-size: 22px; letter-spacing: 2px; color: #e6b655; }
+.cam-eye-row {
+  display: flex; align-items: center; gap: 9px;
+  margin: 9px 0 8px; min-height: 26px;
+}
+.cam-eye { width: 34px; height: 17px; flex: none; }
+.cam-eye-row span { font-size: 12px; color: var(--ink-soft); }
+.cam-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.cam-actions .btn { flex: 1 1 auto; padding: 7px 10px; font-size: 12px; }
+.cam-privacy {
+  margin: 8px 0 0; font-size: 10px; line-height: 1.5;
+  color: var(--ink-soft); opacity: .8;
+}
+
+/* ============================================================
+   炒饭「右手握拳转腕」：摄像头面板与转腕计数
+   面板放在舞台左上角 —— 炒锅偏右下，左上被备料区腾空后正好放得下，
+   不会像贴在右上那样压住锅沿。
+   ============================================================ */
+.cam-overlay.cam-left { justify-content: flex-start; }
+#stirPanelSlot { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+.cam-turn-row {
+  display: flex; align-items: center; gap: 7px;
+  margin: 9px 0 8px; min-height: 26px;
+}
+.turn-dot {
+  width: 11px; height: 11px; border-radius: 50%; flex: none;
+  background: rgba(230, 182, 85, .22);
+  border: 1px solid rgba(230, 182, 85, .55);
+  transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.turn-dot.on {
+  background: #e6b655;
+  border-color: #e6b655;
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(230, 182, 85, .75);
+}
+.cam-turn-row span:last-child { font-size: 12px; color: var(--ink-soft); }
+
+@media (max-width: 900px) {
+  .cook-body { grid-template-columns: 1fr; }
+  /* 舞台压扁后，分支浮层（茶底 / 锅底 / 口味）会被裁掉按钮，这里给足高度 */
+  .cook-stage { min-height: 72vw; }
+  .cook-side { flex-direction: row; flex-wrap: wrap; }
+  .side-block { flex: 1 1 240px; }
+  .result-layout { grid-template-columns: 1fr; }
+  #screen-cook.active { height: auto; min-height: 100vh; }
+}
+@media (max-width: 560px) {
+  .start-card { padding: 28px 22px; }
+  /* 窄屏备料区改为顶部横条：留在底部会横跨舞台、把锅具盖住导致拖不进去 */
+  .prep-board {
+    left: 3%; right: 3%; top: 2%; bottom: auto;
+    max-width: none; padding: 8px 10px; gap: 8px;
+  }
+  .result-actions { grid-template-columns: 1fr; }
+  .cook-controls .btn { padding: 8px 12px; font-size: 13px; }
+
+  .cook-stage { min-height: 86vw; }
+  /* 浮层内容改为可滚动，避免长面板被舞台裁切 */
+  .choice-overlay {
+    padding: 3% 4% 6%; gap: 10px;
+    overflow-y: auto; justify-content: flex-start;
+  }
+  .choice-title { font-size: 20px; }
+  .choice-panel { padding: 12px 16px; }
+  .choice-cards { gap: 10px; }
+  .choice-card { min-width: 92px; padding: 10px 12px; }
+  .choice-card .cc-name { font-size: 17px; }
+  .choice-card .cc-sub { display: none; }
+  .choice-card img { width: 42px; height: 42px; }
+  .seg-row { margin: 7px 0; gap: 7px; }
+  .seg-label { min-width: 40px; font-size: 13px; }
+  .seg-btn { padding: 5px 11px; font-size: 13px; }
+
+  /* 舞台变高后，锅具 / 杯具相对变大，按比例收一点 */
+  .wok-zone { width: 34%; height: 27%; }
+  .wok-zone.pot-style { width: 42%; height: 31%; }
+  .cup-zone { width: 30%; top: 58%; }
+  .board-zone { left: 16%; width: 42%; }
+
+  /* 窄屏：摄像头面板缩小并收窄，避免压住杯子 */
+  .cam-overlay { padding: 8px 10px; }
+  .cam-panel { width: 178px; max-width: 44%; padding: 8px 10px 7px; }
+  .cam-title { font-size: 13px; }
+  .cam-badge { font-size: 10px; padding: 1px 7px; }
+  .cam-veil { font-size: 10px; }
+  .cam-veil-eye { font-size: 16px; }
+  .cam-eye-row { margin: 6px 0 5px; }
+  .cam-eye-row span { font-size: 11px; }
+  .cam-actions .btn { padding: 5px 7px; font-size: 11px; }
+  .cam-privacy { font-size: 9px; margin-top: 5px; }
+
+  /* 窄屏：炒饭摄像头面板放左上角，但要收窄，避免压住炒锅左沿（锅要能拖动画圈） */
+  .cam-overlay.cam-left .cam-panel { max-width: 40%; }
+  .cam-turn-row { margin: 6px 0 5px; gap: 5px; }
+  .turn-dot { width: 9px; height: 9px; }
+  .cam-turn-row span:last-child { font-size: 11px; }
+
+  /* 窄屏：备料区改成了顶部横条，奶量/甜度面板必须让位，
+     否则会压住牛奶瓶，导致玩家点不到、拖不动。 */
+  .choice-overlay.milk-choices {
+    justify-content: flex-end !important;
+    padding-top: 0 !important;
+    padding-bottom: 4% !important;
+  }
+
+  /* 窄屏封口阶段：备料横条已无用途（牛奶/冰块都用完了），
+     隐藏后摄像头面板才能居中放到顶部，不遮挡杯子。 */
+  .cook-stage.phase-seal .prep-board { display: none !important; }
+  .cook-stage.phase-seal .cam-overlay {
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px 10px;
+  }
+  /* 窄屏舞台很矮，面板改为「左视频 + 右信息」的横向紧凑条，
+     高度压到 ~110px，给杯子让出空间 */
+  .cook-stage.phase-seal .cam-panel {
+    width: calc(100% - 16px);
+    max-width: none;
+    padding: 8px 10px;
+    display: grid;
+    grid-template-columns: 106px 1fr;
+    grid-template-areas:
+      "view head"
+      "view eye"
+      "view actions"
+      "view privacy";
+    column-gap: 10px;
+    row-gap: 2px;
+    align-content: start;
+  }
+  .cook-stage.phase-seal .cam-view { grid-area: view; align-self: start; }
+  .cook-stage.phase-seal .cam-head {
+    grid-area: head; flex-direction: column; align-items: flex-start; gap: 2px;
+  }
+  .cook-stage.phase-seal .cam-eye-row { grid-area: eye; margin: 3px 0 2px; }
+  .cook-stage.phase-seal .cam-actions { grid-area: actions; }
+  .cook-stage.phase-seal .cam-privacy { grid-area: privacy; margin-top: 2px; }
+  /* 杯子略微下移，与横向面板错开 */
+  .cook-stage.phase-seal .cup-zone { top: 62%; }
+
+  /* 窄屏轻压定形：面团在舞台左下，摄像头面板压成顶部横条让位 */
+  .cook-stage.phase-press .cam-overlay {
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px 10px;
+  }
+  .cook-stage.phase-press .cam-panel {
+    width: calc(100% - 16px);
+    max-width: none;
+    padding: 8px 10px;
+    display: grid;
+    grid-template-columns: 106px 1fr;
+    grid-template-areas:
+      "view head"
+      "view hand"
+      "view actions"
+      "view privacy";
+    column-gap: 10px;
+    row-gap: 2px;
+    align-content: start;
+  }
+  .cook-stage.phase-press .cam-view { grid-area: view; align-self: start; }
+  .cook-stage.phase-press .cam-head {
+    grid-area: head; flex-direction: column; align-items: flex-start; gap: 2px;
+  }
+  .cook-stage.phase-press .cam-hand-row { grid-area: hand; margin: 3px 0 2px; }
+  .cook-stage.phase-press .cam-actions { grid-area: actions; }
+  .cook-stage.phase-press .cam-privacy { grid-area: privacy; margin-top: 2px; }
+}
