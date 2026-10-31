@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>烹香物语 · 中式料理多感官互动游戏</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ========== 启动 / 提示页 ========== -->
+  <section id="screen-start" class="screen active">
+    <div class="start-bg"></div>
+    <div class="start-card paper">
+      <p class="start-kicker">一人独居的美食日记</p>
+      <h1 class="game-title">烹香物语</h1>
+      <p class="start-sub">中式料理 · 多感官互动原型</p>
+      <p class="start-desc">在小小的厨房里，用鼠标完成下料、翻炒与包裹的手势，
+        让画面、声音与气味随你的动作同步发生。</p>
+      <div class="scent-notice">
+        <strong>气味体验提示</strong>
+        <p>本原型包含模拟气味输出（以气味模块编号提示）。气味可随时暂停、关闭或跳过；
+          焦糊气味仅为低强度短时模拟，不使用真实燃烧材料。</p>
+      </div>
+      <label class="check-line">
+        <input type="checkbox" id="opt-skip-scent">
+        跳过嗅觉环节（仍可体验视觉与听觉反馈）
+      </label>
+      <label class="check-line test-mode">
+        <input type="checkbox" id="opt-test-mode">
+        测试模式（A/B 条件与埋点导出）
+        <select id="opt-ab" disabled>
+          <option value="B">B 版：视觉 + 听觉 + 气味</option>
+          <option value="A">A 版：仅视觉 + 听觉</option>
+        </select>
+      </label>
+      <button class="btn btn-primary btn-big" id="btn-start">开始做菜</button>
+      <p class="privacy-note">不采集人脸与任何隐私信息 · 手势以鼠标/触屏替代验证<br>
+        奶茶「眨眼封口」、鲜花饼「双手合十」、炒饭「右手握拳转腕」可选开启摄像头：
+        画面仅在本机实时识别，不上传、不录制、不保存</p>
+      <div class="env-notice hidden" id="envNotice"></div>
+    </div>
+  </section>
+
+  <!-- ========== 菜单页 ========== -->
+  <section id="screen-menu" class="screen">
+    <header class="page-header">
+      <h2>今日想做什么？</h2>
+      <p class="header-sub">六道家常菜全部可下厨：拖拽、手势、掌火，一个都不能少</p>
+    </header>
+    <div id="menu-grid" class="menu-grid"></div>
+  </section>
+
+  <!-- ========== 菜品说明页 ========== -->
+  <section id="screen-dish" class="screen">
+    <div id="dish-intro" class="dish-intro paper"></div>
+  </section>
+
+  <!-- ========== 烹饪页 ========== -->
+  <section id="screen-cook" class="screen">
+    <div class="cook-topbar">
+      <button class="btn btn-ghost" id="btn-back-menu">‹ 菜单</button>
+      <div class="cook-title-wrap">
+        <h2 id="cook-dish-name">炒饭</h2>
+        <div id="step-pills" class="step-pills"></div>
+      </div>
+      <div class="cook-controls">
+        <button class="btn btn-ghost" id="btn-retry" title="重试当前步骤">↺ 重试</button>
+        <button class="btn btn-ghost" id="btn-scent-toggle" title="气味开关">气味：开</button>
+        <button class="btn btn-ghost" id="btn-scent-skip" title="跳过本局嗅觉环节">跳过嗅觉</button>
+        <button class="btn btn-ghost" id="btn-pause" title="暂停">⏸ 暂停</button>
+      </div>
+    </div>
+    <div class="cook-body">
+      <div id="cook-stage" class="cook-stage"></div>
+      <aside class="cook-side">
+        <div class="side-block">
+          <h3>操作提示</h3>
+          <p id="hint-text" class="hint-text"></p>
+          <div id="feedback-banner" class="feedback-banner hidden"></div>
+        </div>
+        <div class="side-block" id="firebar-block">
+          <h3 id="firebar-title">火候</h3>
+          <div id="firebar-slot"></div>
+        </div>
+        <div class="side-block scent-block" id="scent-block">
+          <h3>气味输出 <span class="badge-sim">模拟</span></h3>
+          <div id="scent-panel" class="scent-panel">
+            <div class="scent-name" id="scent-name">— 暂无输出 —</div>
+            <div class="scent-meta">
+              <span id="scent-intensity" class="scent-dots"></span>
+              <span id="scent-timer"></span>
+            </div>
+            <div class="scent-bar"><div id="scent-bar-fill"></div></div>
+          </div>
+        </div>
+        <div class="side-block">
+          <h3>步骤</h3>
+          <ol id="step-list" class="step-list"></ol>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== 结果卡页 ========== -->
+  <section id="screen-result" class="screen">
+    <div class="result-layout">
+      <div class="result-card-wrap">
+        <canvas id="result-canvas" width="900" height="1620"></canvas>
+      </div>
+      <div class="result-side paper">
+        <h2 id="result-title">出锅啦！</h2>
+        <p id="result-summary" class="result-summary"></p>
+        <div class="result-actions">
+          <button class="btn btn-primary" id="btn-download-card">下载结果卡</button>
+          <button class="btn" id="btn-copy-share">复制分享文案</button>
+          <button class="btn" id="btn-cook-again">再做一次</button>
+          <button class="btn btn-ghost" id="btn-result-menu">返回菜单</button>
+        </div>
+        <div class="share-hint">统一话题：#烹香物语 #中式料理多感官游戏</div>
+        <div class="feedback-box">
+          <h3>愿意把这次体验分享给朋友吗？</h3>
+          <div id="star-row" class="star-row"></div>
+          <p id="feedback-thanks" class="hidden">感谢反馈，已记录（匿名）。</p>
+          <button class="btn btn-ghost hidden" id="btn-export-log">导出测试记录 (JSON)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 暂停遮罩 -->
+<div id="pause-overlay" class="overlay hidden">
+  <div class="overlay-card paper">
+    <h2>已暂停</h2>
+    <p>气味输出已暂停，灶台为你留着火。</p>
+    <button class="btn btn-primary" id="btn-resume">继续烹饪</button>
+    <button class="btn" id="btn-restart-dish">重做这道菜</button>
+    <button class="btn btn-ghost" id="btn-quit-menu">返回菜单</button>
+  </div>
+</div>
+
+<!-- 气味触发提示 -->
+<div id="scent-toast" class="scent-toast hidden"></div>
+
+<!-- 脚本弹窗（P1 扩展菜品） -->
+<div id="script-modal" class="overlay hidden">
+  <div class="overlay-card paper modal-wide">
+    <button class="modal-close" id="btn-close-modal">×</button>
+    <div id="script-modal-body"></div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/sfx.js"></script>
+<script src="js/scent.js"></script>
+<script src="js/telemetry.js"></script>
+<script src="js/mp-loader.js"></script>
+<script src="js/handcam.js"></script>
+<script src="js/wrist.js"></script>
+<script src="js/blink.js"></script>
+<script src="js/hands.js"></script>
+<script src="js/game.js"></script>
+<script src="js/friedrice.js"></script>
+<script src="js/zongzi.js"></script>
+<script src="js/naicha.js"></script>
+<script src="js/huoguo.js"></script>
+<script src="js/suancaiyu.js"></script>
+<script src="js/xianhuabing.js"></script>
+</body>
+</html>
